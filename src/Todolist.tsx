@@ -6,10 +6,10 @@ type PropsType = {
 	todoListID: string
 	title: string
 	tasks: TaskType[]
-	removeTask: (taskId: string) => void
-	changeFilter: (filter: FilterValuesType) => void
-	addTask: (title: string) => void
-	changeTaskStatus: (taskId: string, taskStatus: boolean) => void
+	removeTask: (todoListID: string, taskId: string) => void
+	changeFilter: ( todoListID: string, filter: FilterValuesType) => void
+	addTask: (todoListID: string, title: string) => void
+	changeTaskStatus: (todoListID:string, taskId: string, taskStatus: boolean) => void
 	filter: FilterValuesType
 }
 
@@ -26,14 +26,14 @@ export const Todolist = (props: PropsType) => {
 
 
 
-	const {title, tasks, filter, removeTask, changeFilter, addTask, changeTaskStatus} = props
+	const {title, tasks, filter, todoListID, removeTask, changeFilter, addTask, changeTaskStatus} = props
 
 	const [taskTitle, setTaskTitle] = useState('')
 	const [error, setError] = useState<string | null>(null)
 
 	const addTaskHandler = () => {
 		if (taskTitle.trim() !== '') {
-			addTask(taskTitle.trim())
+			addTask(todoListID, taskTitle.trim())
 			setTaskTitle('')
 		} else {
 			setError('Title is required')
@@ -51,9 +51,9 @@ export const Todolist = (props: PropsType) => {
 		}
 	}
 ///////////////////////////////////////////////здесь 
-	const changeFilterTasksHandler = (todoListID, filter: FilterValuesType) => {
+	const changeFilterTasksHandler = ( filter: FilterValuesType) => {
 		console.log(props.todoListID)
-		changeFilter(filter)
+		changeFilter(todoListID, filter)
 	}
 
 	return (
@@ -76,12 +76,12 @@ export const Todolist = (props: PropsType) => {
 						{tasks.map((task) => {
 
 							const removeTaskHandler = () => {
-								removeTask(task.id)
+								removeTask(todoListID,task.id)
 							}
 
 							const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
 								const newStatusValue = e.currentTarget.checked
-								changeTaskStatus(task.id, newStatusValue)
+								changeTaskStatus(todoListID, task.id, newStatusValue)
 							}
 
 							return <li key={task.id} className={task.isDone ? 'is-done' : ''}>
