@@ -175,41 +175,30 @@ function App() {
     }
 
     function addTask(title: string, todolistId: string) {
-        let newTask = {id: v1(), title: title, isDone: false};
+        debugger
+        let newTask = {taskId: v1(), title: title, isDone: false};
         setTodolists(todolists.map(el =>el.todolistId === todolistId
-            ?{...el, tasks:[...todolists.tasks, newTask]}
+            ? {...el, tasks: [ newTask,...el.tasks]}
             :el
         ))
     }
 
     function changeStatus(id: string, isDone: boolean, todolistId: string) {
-        // //достанем нужный массив по todolistId:
-        // let todolistTasks = tasks[todolistId];
-        // // найдём нужную таску:
-        // let task = todolistTasks.find(t => t.id === id);
-        // //изменим таску, если она нашлась
-        // if (task) {
-        //     task.isDone = isDone;
-        //     // засетаем в стейт копию объекта, чтобы React отреагировал перерисовкой
-        //     setTasks({...tasks});
-        // }
+        setTodolists(todolists.map(el => el.todolistId ===todolistId
+            ?{...el, tasks: el.tasks.map(t => t.taskId === id? {...t, isDone}:t)}
+            :el
+        ))
     }
 
     function changeFilter(value: FilterValuesType, todolistId: string) {
-        // let todolist = todolists.find(tl => tl.id === todolistId);
-        // if (todolist) {
-        //     todolist.filter = value;
-        //     setTodolists([...todolists])
-        // }
+       setTodolists(todolists.map(el => el.todolistId ===todolistId
+        ? {...el, filter: value}
+        :el
+       ))
     }
 
     function removeTodolist(id: string) {
-        // // засунем в стейт список тудулистов, id которых не равны тому, который нужно выкинуть
-        // setTodolists(todolists.filter(tl => tl.id != id));
-        // // удалим таски для этого тудулиста из второго стейта, где мы храним отдельно таски
-        // delete tasks[id]; // удаляем св-во из объекта... значением которого являлся массив тасок
-        // // засетаем в стейт копию объекта, чтобы React отреагировал перерисовкой
-        // setTasks({...tasks});
+        setTodolists(todolists.filter(el => el.todolistId !== id))
     }
 
     return (
