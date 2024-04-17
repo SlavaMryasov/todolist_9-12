@@ -11,7 +11,7 @@ export const tasksReducer = (state: TaskType[], action: ActionTypes): TaskType[]
             return [newTask, ...state]
         }
         case 'CHANGE-FILTER': {
-            return state
+            return action.payload.filter
         }
         default: return state
     }

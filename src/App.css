@@ -1,8 +1,4 @@
-.App {
-  padding: 30px;
+.todolist-title-container {
   display: flex;
-}
-
-.App > div {
-  margin-right: 50px;
+  align-items: center;
 }
