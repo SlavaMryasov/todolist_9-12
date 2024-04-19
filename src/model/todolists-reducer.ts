@@ -30,6 +30,7 @@ export const totolistReducer = (state = initialState, action: ActionType): Todol
 
 type ActionType = RemoveTodolistType | AddTodolistType | UpdateTodolistType | ChangeFilterType
 
+
 type RemoveTodolistType = {
     type: 'REMOVE-TODOLIST',
     payload: {

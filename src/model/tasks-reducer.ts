@@ -31,11 +31,16 @@ export const tasksReducer = (state: TasksStateType, action: ActionType): TasksSt
                     : t)
             }
         }
+        case "INITIALIZE-TASKS": {
+            return {
+                ...state, [action.payload.todolistId]: []
+            }
+        }
         default: return state
     }
 }
 
-type ActionType = RemoveTaskType | AddTaskType | UpdateTaskType | ChangeTaskStatusType
+type ActionType = RemoveTaskType | AddTaskType | UpdateTaskType | ChangeTaskStatusType | InitializeTasksType
 
 type RemoveTaskType = {
     type: "REMOVE-TASK"
@@ -59,6 +64,12 @@ type ChangeTaskStatusType = {
     payload: {
         taskId: string
         taskStatus: boolean
+        todolistId: string
+    }
+}
+type InitializeTasksType = {
+    type: "INITIALIZE-TASKS"
+    payload: {
         todolistId: string
     }
 }
@@ -109,6 +120,14 @@ export const updateTaskAC = (todolistId: string, taskId: string, title: string) 
             todolistId,
             taskId,
             title
+        }
+    } as const
+}
+export const initializeTasksAC = (todolistId: string) => {
+    return {
+        type: "INITIALIZE-TASKS",
+        payload: {
+            todolistId
         }
     } as const
 }

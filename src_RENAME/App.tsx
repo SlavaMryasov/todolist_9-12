@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
-import {TaskType, Todolist} from './Todolist';
-import {v1} from 'uuid';
+import { TaskType, Todolist } from './Todolist';
+import { v1 } from 'uuid';
 
-type TodolistType =ObjectType &{
-    todolistId:string
+type TodolistType = ObjectType & {
+    todolistId: string
 }
 
 type ObjectType = {
@@ -47,8 +47,8 @@ function App() {
             title: "What to learn",
             filter: "all",
             tasks: [
-                {taskId: v1(), title: "HTML&CSS", isDone: true},
-                {taskId: v1(), title: "JS", isDone: true}
+                { taskId: v1(), title: "HTML&CSS", isDone: true },
+                { taskId: v1(), title: "JS", isDone: true }
             ],
             students: [
                 'Rick Kane',
@@ -107,8 +107,8 @@ function App() {
             title: "What to do",
             filter: "all",
             tasks: [
-                {taskId: v1(), title: "HTML&CSS2", isDone: true},
-                {taskId: v1(), title: "JS2", isDone: true}
+                { taskId: v1(), title: "HTML&CSS2", isDone: true },
+                { taskId: v1(), title: "JS2", isDone: true }
             ],
             students: [
                 'Jago Wormald1',
@@ -160,41 +160,41 @@ function App() {
         }
     ]
 
-    const [todolists,setTodolists]=useState<TodolistType[]>([])
-    
-    useEffect(()=> {
-        setTodolists( todoFromServer.map(el=>({...el,todolistId:v1()})))
+    const [todolists, setTodolists] = useState<TodolistType[]>([])
+
+    useEffect(() => {
+        setTodolists(todoFromServer.map(el => ({ ...el, todolistId: v1() })))
         console.log('useEffect')
     }, [])
 
     function removeTask(id: string, todolistId: string) {
-        setTodolists(todolists.map(el=> el.todolistId === todolistId
-            ?{...el, tasks:el.tasks.filter(t=>t.taskId !==id)}
-            :el
+        setTodolists(todolists.map(el => el.todolistId === todolistId
+            ? { ...el, tasks: el.tasks.filter(t => t.taskId !== id) }
+            : el
         ))
     }
 
     function addTask(title: string, todolistId: string) {
-        debugger
-        let newTask = {taskId: v1(), title: title, isDone: false};
-        setTodolists(todolists.map(el =>el.todolistId === todolistId
-            ? {...el, tasks: [ newTask,...el.tasks]}
-            :el
+
+        let newTask = { taskId: v1(), title: title, isDone: false };
+        setTodolists(todolists.map(el => el.todolistId === todolistId
+            ? { ...el, tasks: [newTask, ...el.tasks] }
+            : el
         ))
     }
 
     function changeStatus(id: string, isDone: boolean, todolistId: string) {
-        setTodolists(todolists.map(el => el.todolistId ===todolistId
-            ?{...el, tasks: el.tasks.map(t => t.taskId === id? {...t, isDone}:t)}
-            :el
+        setTodolists(todolists.map(el => el.todolistId === todolistId
+            ? { ...el, tasks: el.tasks.map(t => t.taskId === id ? { ...t, isDone } : t) }
+            : el
         ))
     }
 
     function changeFilter(value: FilterValuesType, todolistId: string) {
-       setTodolists(todolists.map(el => el.todolistId ===todolistId
-        ? {...el, filter: value}
-        :el
-       ))
+        setTodolists(todolists.map(el => el.todolistId === todolistId
+            ? { ...el, filter: value }
+            : el
+        ))
     }
 
     function removeTodolist(id: string) {

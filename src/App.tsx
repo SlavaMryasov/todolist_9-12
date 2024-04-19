@@ -17,7 +17,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { changeFilterAC, totolistReducer, updateTodolistAC } from './model/todolists-reducer';
 import { removeTodolistAC } from './model/todolists-reducer';
 import { addTodolistAC } from './model/todolists-reducer';
-import { addTaskAC, changeTaskStatusAC, removeTaskAC, tasksReducer, updateTaskAC } from './model/tasks-reducer';
+import { addTaskAC, changeTaskStatusAC, initializeTasksAC, removeTaskAC, tasksReducer, updateTaskAC } from './model/tasks-reducer';
 
 export type TaskType = {
 	id: string
@@ -77,6 +77,7 @@ function App() {
 	}
 
 	const addTask = (title: string, todolistId: string) => {
+
 		const newTask = { id: v1(), title: title, isDone: false }
 		dispatchTasks(addTaskAC(title, todolistId, newTask))
 	}
@@ -103,8 +104,9 @@ function App() {
 
 	const addTodolist = (title: string) => {
 		const todolistId = v1()
+		dispatchTasks(initializeTasksAC(todolistId))
 		dispatchTodolists(addTodolistAC(title, todolistId))
-
+		console.log(tasks)
 	}
 
 

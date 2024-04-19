@@ -13,7 +13,6 @@ export const AddItemForm = ({ addItem }: PropsType) => {
 	const [error, setError] = useState<string | null>(null)
 
 	const addItemHandler = () => {
-		debugger
 		if (title.trim() !== '') {
 			addItem(title.trim())
 			setTitle('')
