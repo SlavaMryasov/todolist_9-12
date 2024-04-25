@@ -1,4 +1,5 @@
 import { TaskType, TasksStateType } from "../App"
+import { AddTodolistType } from "./todolists-reducer"
 
 
 export const tasksReducer = (state: TasksStateType, action: ActionType): TasksStateType => {
@@ -23,7 +24,7 @@ export const tasksReducer = (state: TasksStateType, action: ActionType): TasksSt
                     : t)
             }
         }
-        case "UPDATE-TASK": {
+        case "UPDATE-TASK-TITLE": {
             return {
                 ...state,
                 [action.payload.todolistId]: state[action.payload.todolistId].map(t => t.id === action.payload.taskId
@@ -31,16 +32,23 @@ export const tasksReducer = (state: TasksStateType, action: ActionType): TasksSt
                     : t)
             }
         }
-        case "INITIALIZE-TASKS": {
+        case 'ADD-TODOLIST': {
             return {
-                ...state, [action.payload.todolistId]: []
+                ...state,
+                [action.payload.todolistId]: []
             }
         }
+        // case "INITIALIZE-TASKS": {
+        //     return {
+        //         ...state, [action.payload.todolistId]: []
+        //     }
+        // }
         default: return state
     }
 }
 
-type ActionType = RemoveTaskType | AddTaskType | UpdateTaskType | ChangeTaskStatusType | InitializeTasksType
+type ActionType = RemoveTaskType | AddTaskType | UpdateTaskTitleType
+    | ChangeTaskStatusType | AddTodolistType
 
 type RemoveTaskType = {
     type: "REMOVE-TASK"
@@ -53,7 +61,6 @@ type RemoveTaskType = {
 type AddTaskType = {
     type: "ADD-TASK"
     payload: {
-        title: string
         todolistId: string
         newTask: TaskType
     }
@@ -67,15 +74,15 @@ type ChangeTaskStatusType = {
         todolistId: string
     }
 }
-type InitializeTasksType = {
-    type: "INITIALIZE-TASKS"
-    payload: {
-        todolistId: string
-    }
-}
+// type InitializeTasksType = {
+//     type: "INITIALIZE-TASKS"
+//     payload: {
+//         todolistId: string
+//     }
+// }
 
-type UpdateTaskType = {
-    type: "UPDATE-TASK"
+type UpdateTaskTitleType = {
+    type: "UPDATE-TASK-TITLE"
     payload: {
         todolistId: string
         taskId: string
@@ -97,7 +104,6 @@ export const addTaskAC = (title: string, todolistId: string, newTask: TaskType) 
     return {
         type: "ADD-TASK",
         payload: {
-            title,
             todolistId,
             newTask
         }
@@ -113,9 +119,9 @@ export const changeTaskStatusAC = (taskId: string, taskStatus: boolean, todolist
         }
     } as const
 }
-export const updateTaskAC = (todolistId: string, taskId: string, title: string) => {
+export const updateTaskTitleAC = (todolistId: string, taskId: string, title: string) => {
     return {
-        type: "UPDATE-TASK",
+        type: "UPDATE-TASK-TITLE",
         payload: {
             todolistId,
             taskId,
@@ -123,11 +129,12 @@ export const updateTaskAC = (todolistId: string, taskId: string, title: string) 
         }
     } as const
 }
-export const initializeTasksAC = (todolistId: string) => {
-    return {
-        type: "INITIALIZE-TASKS",
-        payload: {
-            todolistId
-        }
-    } as const
-}
+// export const initializeTasksAC = (todolistId: string) => {
+//     return {
+//         type: "INITIALIZE-TASKS",
+//         payload: {
+//             todolistId
+//         }
+//     } as const
+// }
+
