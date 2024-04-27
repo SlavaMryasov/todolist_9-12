@@ -1,8 +1,22 @@
 import { TaskType, TasksStateType } from "../App"
-import { AddTodolistType } from "./todolists-reducer"
+import { AddTodolistType, RemoveTodolistType } from "./todolists-reducer"
+import { todolistID1, todolistID2 } from "./todolists-reducer"
+import { v1 } from "uuid"
 
 
-export const tasksReducer = (state: TasksStateType, action: ActionType): TasksStateType => {
+const initialState: TasksStateType = {
+    [todolistID1]: [
+        { id: v1(), title: 'HTML&CSS', isDone: true },
+        { id: v1(), title: 'JS', isDone: true },
+        { id: v1(), title: 'ReactJS', isDone: false },
+    ],
+    [todolistID2]: [
+        { id: v1(), title: 'Rest API', isDone: true },
+        { id: v1(), title: 'GraphQL', isDone: false },
+    ],
+}
+
+export const tasksReducer = (state: TasksStateType = initialState, action: ActionType): TasksStateType => {
     switch (action.type) {
         case "REMOVE-TASK": {
             return {
@@ -38,17 +52,22 @@ export const tasksReducer = (state: TasksStateType, action: ActionType): TasksSt
                 [action.payload.todolistId]: []
             }
         }
+        case 'REMOVE-TODOLIST': {
+            const stateCopy = { ...state }
+            delete stateCopy[action.payload.id]
+            return stateCopy
+        }
         // case "INITIALIZE-TASKS": {
         //     return {
         //         ...state, [action.payload.todolistId]: []
         //     }
         // }
-        default: return state
+        default: return state;
     }
 }
 
 type ActionType = RemoveTaskType | AddTaskType | UpdateTaskTitleType
-    | ChangeTaskStatusType | AddTodolistType
+    | ChangeTaskStatusType | AddTodolistType | RemoveTodolistType
 
 type RemoveTaskType = {
     type: "REMOVE-TASK"

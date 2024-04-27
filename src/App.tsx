@@ -1,6 +1,6 @@
 import './App.css';
 import { Todolist } from "./Todolist";
-import React, { useReducer, useState } from "react";
+import React, { useState } from "react";
 import { v1 } from "uuid";
 import { AddItemForm } from "./AddItemForm";
 import AppBar from '@mui/material/AppBar';
@@ -14,10 +14,13 @@ import { MenuButton } from "./MenuButton";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import CssBaseline from "@mui/material/CssBaseline";
-import { changeFilterAC, totolistReducer, updateTodolistAC } from './model/todolists-reducer';
+import { changeFilterAC, updateTodolistAC } from './model/todolists-reducer';
 import { removeTodolistAC } from './model/todolists-reducer';
 import { addTodolistAC } from './model/todolists-reducer';
-import { addTaskAC, changeTaskStatusAC, removeTaskAC, tasksReducer, updateTaskTitleAC } from './model/tasks-reducer';
+import { addTaskAC, changeTaskStatusAC, removeTaskAC, updateTaskTitleAC } from './model/tasks-reducer';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { AppRootState } from './model/store';
 
 export type TaskType = {
 	id: string
@@ -41,25 +44,9 @@ type ThemeMode = 'dark' | 'light'
 
 function App() {
 
-	let todolistID1 = v1()
-	let todolistID2 = v1()
-
-	let [todolists, dispatchTodolists] = useReducer(totolistReducer, [
-		{ id: todolistID1, title: 'What to learn', filter: 'all' },
-		{ id: todolistID2, title: 'What to buy', filter: 'all' },
-	])
-
-	let [tasks, dispatchTasks] = useReducer(tasksReducer, {
-		[todolistID1]: [
-			{ id: v1(), title: 'HTML&CSS', isDone: true },
-			{ id: v1(), title: 'JS', isDone: true },
-			{ id: v1(), title: 'ReactJS', isDone: false },
-		],
-		[todolistID2]: [
-			{ id: v1(), title: 'Rest API', isDone: true },
-			{ id: v1(), title: 'GraphQL', isDone: false },
-		],
-	})
+	const dispatch = useDispatch() // просто получаем функцию из библиотеки, которая может диспатчить экшен в стор
+	const todolists = useSelector<AppRootState, TodolistType[]>(state => state.todolists) // достаем что нужно из стейта
+	const tasks = useSelector<AppRootState, TasksStateType>(state => state.tasks)
 
 	const [themeMode, setThemeMode] = useState<ThemeMode>('light')
 
@@ -73,44 +60,39 @@ function App() {
 	});
 
 	const removeTask = (taskId: string, todolistId: string) => {
-		dispatchTasks(removeTaskAC(taskId, todolistId))
+		dispatch(removeTaskAC(taskId, todolistId))
 	}
 
 	const addTask = (title: string, todolistId: string) => {
 		const newTask = { id: v1(), title: title, isDone: false }
-		dispatchTasks(addTaskAC(title, todolistId, newTask))
+		dispatch(addTaskAC(title, todolistId, newTask))
 	}
 
 	const changeTaskStatus = (taskId: string, taskStatus: boolean, todolistId: string) => {
-		dispatchTasks(changeTaskStatusAC(taskId, taskStatus, todolistId))
+		dispatch(changeTaskStatusAC(taskId, taskStatus, todolistId))
 	}
 
 
 	const updateTask = (todolistId: string, taskId: string, title: string) => {
-		// dispatchTasks(updateTaskTitleAC(todolistId, taskId, title))
-		dispatchTasks(updateTaskTitleAC(todolistId, taskId, title))
+		dispatch(updateTaskTitleAC(todolistId, taskId, title))
 	}
 
 	const changeFilter = (filter: FilterValuesType, todolistId: string) => {
-		dispatchTodolists(changeFilterAC(filter, todolistId))
+		dispatch(changeFilterAC(filter, todolistId))
 	}
 
 	const removeTodolist = (todolistId: string) => {
-		dispatchTodolists(removeTodolistAC(todolistId))
+		dispatch(removeTodolistAC(todolistId))
 	}
 
 
 	const addTodolist = (title: string) => {
 		const todolistId = v1()
-		const action = addTodolistAC(title, todolistId)
-		dispatchTasks(action)
-		dispatchTodolists(action)
+		dispatch(addTodolistAC(title, todolistId))
 	}
 
-
-
 	const updateTodolist = (todolistId: string, title: string) => {
-		dispatchTodolists(updateTodolistAC(todolistId, title))
+		dispatch(updateTodolistAC(todolistId, title))
 	}
 
 	const changeModeHandler = () => {

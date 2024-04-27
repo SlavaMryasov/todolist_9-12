@@ -1,4 +1,4 @@
-import { totolistReducer } from "./todolists-reducer"
+import { todolistsReducer } from "./todolists-reducer"
 import { TodolistType } from "../App"
 import { v1 } from "uuid"
 
@@ -20,7 +20,7 @@ test('after remove todolist, length-1', () => {
     } as const
 
 
-    const endState = totolistReducer(startState, action)
+    const endState = todolistsReducer(startState, action)
 
     expect(endState.length).toBe(1)
     expect(endState[0].id).toBe(todolistId2)
@@ -45,7 +45,7 @@ test('after added todolist, leght+1', () => {
         }
     } as const
 
-    const endState = totolistReducer(startState, action)
+    const endState = todolistsReducer(startState, action)
 
     expect(endState.length).toBe(3)
     expect(endState[0].title).toBe('22')
@@ -70,7 +70,7 @@ test('title updates correctly', () => {
         }
     } as const
 
-    const endState = totolistReducer(startState, action)
+    const endState = todolistsReducer(startState, action)
 
     expect(endState.length).toBe(2)
     expect(endState[0].title).toBe('some kind of name')
@@ -95,7 +95,7 @@ test('filter before update will be correct', () => {
         }
     } as const
 
-    const endState = totolistReducer(startState, action)
+    const endState = todolistsReducer(startState, action)
 
     expect(endState[0].filter).toBe('active')
 
