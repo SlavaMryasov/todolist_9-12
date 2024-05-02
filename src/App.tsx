@@ -72,6 +72,7 @@ function App() {
 		},
 	});
 
+
 	const removeTask = (taskId: string, todolistId: string) => {
 		dispatchTasks(removeTaskAC(taskId, todolistId))
 	}
