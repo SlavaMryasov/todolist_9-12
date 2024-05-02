@@ -1,6 +1,6 @@
 import './App.css';
 import { Todolist } from "./Todolist";
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import { v1 } from "uuid";
 import { AddItemForm } from "./AddItemForm";
 import AppBar from '@mui/material/AppBar';
@@ -14,13 +14,10 @@ import { MenuButton } from "./MenuButton";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import CssBaseline from "@mui/material/CssBaseline";
-import { changeFilterAC, updateTodolistAC } from './model/todolists-reducer';
+import { changeFilterAC, todolistsReducer, updateTodolistAC } from './model/todolists-reducer';
 import { removeTodolistAC } from './model/todolists-reducer';
 import { addTodolistAC } from './model/todolists-reducer';
-import { addTaskAC, changeTaskStatusAC, removeTaskAC, updateTaskTitleAC } from './model/tasks-reducer';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { AppRootState } from './model/store';
+import { addTaskAC, changeTaskStatusAC, removeTaskAC, tasksReducer, updateTaskTitleAC } from './model/tasks-reducer';
 
 export type TaskType = {
 	id: string
@@ -44,10 +41,25 @@ type ThemeMode = 'dark' | 'light'
 
 function App() {
 
-	const dispatch = useDispatch() // просто получаем функцию из библиотеки, которая может диспатчить экшен в стор
-	const todolists = useSelector<AppRootState, TodolistType[]>(state => state.todolists) // достаем что нужно из стейта
-	const tasks = useSelector<AppRootState, TasksStateType>(state => state.tasks)
+	let todolistID1 = v1()
+	let todolistID2 = v1()
 
+	let [todolists, dispatchTodolists] = useReducer(todolistsReducer, [
+		{ id: todolistID1, title: 'What to learn', filter: 'all' },
+		{ id: todolistID2, title: 'What to buy', filter: 'all' },
+	])
+
+	let [tasks, dispatchTasks] = useReducer(tasksReducer, {
+		[todolistID1]: [
+			{ id: v1(), title: 'HTML&CSS', isDone: true },
+			{ id: v1(), title: 'JS', isDone: true },
+			{ id: v1(), title: 'ReactJS', isDone: false },
+		],
+		[todolistID2]: [
+			{ id: v1(), title: 'Rest API', isDone: true },
+			{ id: v1(), title: 'GraphQL', isDone: false },
+		],
+	})
 
 	const [themeMode, setThemeMode] = useState<ThemeMode>('light')
 
@@ -61,39 +73,44 @@ function App() {
 	});
 
 	const removeTask = (taskId: string, todolistId: string) => {
-		dispatch(removeTaskAC(taskId, todolistId))
+		dispatchTasks(removeTaskAC(taskId, todolistId))
 	}
 
 	const addTask = (title: string, todolistId: string) => {
 		const newTask = { id: v1(), title: title, isDone: false }
-		dispatch(addTaskAC(title, todolistId, newTask))
+		dispatchTasks(addTaskAC(title, todolistId, newTask))
 	}
 
 	const changeTaskStatus = (taskId: string, taskStatus: boolean, todolistId: string) => {
-		dispatch(changeTaskStatusAC(taskId, taskStatus, todolistId))
+		dispatchTasks(changeTaskStatusAC(taskId, taskStatus, todolistId))
 	}
 
 
 	const updateTask = (todolistId: string, taskId: string, title: string) => {
-		dispatch(updateTaskTitleAC(todolistId, taskId, title))
+		// dispatchTasks(updateTaskTitleAC(todolistId, taskId, title))
+		dispatchTasks(updateTaskTitleAC(todolistId, taskId, title))
 	}
 
 	const changeFilter = (filter: FilterValuesType, todolistId: string) => {
-		dispatch(changeFilterAC(filter, todolistId))
+		dispatchTodolists(changeFilterAC(filter, todolistId))
 	}
 
 	const removeTodolist = (todolistId: string) => {
-		dispatch(removeTodolistAC(todolistId))
+		dispatchTodolists(removeTodolistAC(todolistId))
 	}
 
 
 	const addTodolist = (title: string) => {
 		const todolistId = v1()
-		dispatch(addTodolistAC(title, todolistId))
+		const action = addTodolistAC(title, todolistId)
+		dispatchTasks(action)
+		dispatchTodolists(action)
 	}
 
+
+
 	const updateTodolist = (todolistId: string, title: string) => {
-		dispatch(updateTodolistAC(todolistId, title))
+		dispatchTodolists(updateTodolistAC(todolistId, title))
 	}
 
 	const changeModeHandler = () => {
@@ -139,7 +156,7 @@ function App() {
 
 						return (
 							<Grid>
-								<Paper sx={{ p: '0 19px 20px 20px' }}>
+								<Paper sx={{ p: '0 20px 21px 20px' }}>
 									<Todolist
 										key={tl.id}
 										todolistId={tl.id}
