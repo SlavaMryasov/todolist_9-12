@@ -103,7 +103,7 @@ function App() {
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			<AppBar position="static" sx={{ mb: '30px' }}>
+			<AppBar position="static" sx={{ mb: '31px' }}>
 				<Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
 					<IconButton color="inherit">
 						<MenuIcon />
