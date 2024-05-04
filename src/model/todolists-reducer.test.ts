@@ -2,15 +2,24 @@ import { todolistsReducer } from "./todolists-reducer"
 import { TodolistType } from "../App"
 import { v1 } from "uuid"
 
-test('after remove todolist, length-1', () => {
-    let todolistId1 = v1()
-    let todolistId2 = v1()
+let todolistId1: string
+let todolistId2: string
 
-    const startState: TodolistType[] = [
+let startState: TodolistType[]
+
+beforeEach(() => {
+    todolistId1 = v1()
+    todolistId2 = v1()
+
+    startState = [
         { id: todolistId1, title: 'what to learn', filter: 'all' },
         { id: todolistId2, title: 'what to buy', filter: 'all' },
     ]
+})
 
+
+
+test('after remove todolist, length-1', () => {
 
     const action = {
         type: 'REMOVE-TODOLIST',
@@ -29,13 +38,6 @@ test('after remove todolist, length-1', () => {
 
 
 test('after added todolist, leght+1', () => {
-    let todolistId1 = v1()
-    let todolistId2 = v1()
-
-    const startState: TodolistType[] = [
-        { id: todolistId1, title: 'what to learn', filter: 'all' },
-        { id: todolistId2, title: 'what to buy', filter: 'all' },
-    ]
 
     const action = {
         type: 'ADD-TODOLIST',
@@ -54,13 +56,6 @@ test('after added todolist, leght+1', () => {
 
 
 test('title updates correctly', () => {
-    let todolistId1 = v1()
-    let todolistId2 = v1()
-
-    const startState: TodolistType[] = [
-        { id: todolistId1, title: 'what to learn', filter: 'all' },
-        { id: todolistId2, title: 'what to buy', filter: 'all' },
-    ]
 
     const action = {
         type: 'UPDATE-TODOLIST',
@@ -79,13 +74,6 @@ test('title updates correctly', () => {
 
 
 test('filter before update will be correct', () => {
-    let todolistId1 = v1()
-    let todolistId2 = v1()
-
-    const startState: TodolistType[] = [
-        { id: todolistId1, title: 'what to learn', filter: 'all' },
-        { id: todolistId2, title: 'what to buy', filter: 'all' },
-    ]
 
     const action = {
         type: 'CHANGE-FILTER',

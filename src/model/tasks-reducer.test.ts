@@ -2,17 +2,28 @@ import { v1 } from "uuid"
 import { TasksStateType } from "../App"
 import { tasksReducer } from "./tasks-reducer"
 
-test('after remove task state.length-1', () => {
 
-    let todolistId1 = v1()
-    let todolistId2 = v1()
+let todolistId1: string
+let todolistId2: string
 
-    const task1Id = v1()
-    const task2Id = v1()
-    const task3Id = v1()
+let task1Id: string
+let task2Id: string
+let task3Id: string
+let task4Id: string
+
+let startState: TasksStateType
+
+beforeEach(() => {
+    todolistId1 = v1()
+    todolistId2 = v1()
+
+    task1Id = v1()
+    task2Id = v1()
+    task3Id = v1()
+    task4Id = v1()
 
 
-    let startState: TasksStateType = {
+    startState = {
         [todolistId1]: [
             { id: task1Id, title: 'HTML&CSS', isDone: true },
             { id: task2Id, title: 'JS', isDone: true },
@@ -23,6 +34,10 @@ test('after remove task state.length-1', () => {
             { id: task2Id, title: 'GraphQL', isDone: false },
         ],
     }
+})
+
+
+test('after remove task state.length-1', () => {
 
     const action = {
         type: "REMOVE-TASK",
@@ -41,27 +56,6 @@ test('after remove task state.length-1', () => {
 
 
 test('after add task state.length+1', () => {
-
-    let todolistId1 = v1()
-    let todolistId2 = v1()
-
-    const task1Id = v1()
-    const task2Id = v1()
-    const task3Id = v1()
-    const task4Id = v1()
-
-
-    let startState: TasksStateType = {
-        [todolistId1]: [
-            { id: task1Id, title: 'HTML&CSS', isDone: true },
-            { id: task2Id, title: 'JS', isDone: true },
-            { id: task3Id, title: 'ReactJS', isDone: false },
-        ],
-        [todolistId2]: [
-            { id: task1Id, title: 'Rest API', isDone: true },
-            { id: task2Id, title: 'GraphQL', isDone: false },
-        ],
-    }
 
     const newTask = { id: task4Id, title: 'Redux', isDone: false }
 
@@ -84,28 +78,6 @@ test('after add task state.length+1', () => {
 
 test('after change task status to be changed', () => {
 
-    let todolistId1 = v1()
-    let todolistId2 = v1()
-
-    const task1Id = v1()
-    const task2Id = v1()
-    const task3Id = v1()
-
-
-
-    let startState: TasksStateType = {
-        [todolistId1]: [
-            { id: task1Id, title: 'HTML&CSS', isDone: true },
-            { id: task2Id, title: 'JS', isDone: false },
-            { id: task3Id, title: 'ReactJS', isDone: false },
-        ],
-        [todolistId2]: [
-            { id: task1Id, title: 'Rest API', isDone: true },
-            { id: task2Id, title: 'GraphQL', isDone: false },
-        ],
-    }
-
-
     const action = {
         type: "CHANGE-TASK-STATUS",
         payload: {
@@ -118,33 +90,11 @@ test('after change task status to be changed', () => {
     const endState = tasksReducer(startState, action)
 
     expect(endState[todolistId2].find(el => el.id === task2Id)?.isDone).toBe(true)
-    expect(endState[todolistId1].find(el => el.id === task2Id)?.isDone).toBeFalsy()
+    expect(endState[todolistId1].find(el => el.id === task2Id)?.isDone).toBeTruthy()
 });
 
 
 test('after update task title to be changed', () => {
-
-    let todolistId1 = v1()
-    let todolistId2 = v1()
-
-    const task1Id = v1()
-    const task2Id = v1()
-    const task3Id = v1()
-
-
-
-    let startState: TasksStateType = {
-        [todolistId1]: [
-            { id: task1Id, title: 'HTML&CSS', isDone: true },
-            { id: task2Id, title: 'JS', isDone: false },
-            { id: task3Id, title: 'ReactJS', isDone: false },
-        ],
-        [todolistId2]: [
-            { id: task1Id, title: 'Rest API', isDone: true },
-            { id: task2Id, title: 'GraphQL', isDone: false },
-        ],
-    }
-
 
     const action = {
         type: "UPDATE-TASK-TITLE",
@@ -164,28 +114,6 @@ test('after update task title to be changed', () => {
 
 
 test('check new task array when added new todolist', () => {
-
-    let todolistId1 = v1()
-    let todolistId2 = v1()
-
-    const task1Id = v1()
-    const task2Id = v1()
-    const task3Id = v1()
-
-
-
-    let startState: TasksStateType = {
-        [todolistId1]: [
-            { id: task1Id, title: 'HTML&CSS', isDone: true },
-            { id: task2Id, title: 'JS', isDone: false },
-            { id: task3Id, title: 'ReactJS', isDone: false },
-        ],
-        [todolistId2]: [
-            { id: task1Id, title: 'Rest API', isDone: true },
-            { id: task2Id, title: 'GraphQL', isDone: false },
-        ],
-    }
-
 
     const action = {
         type: "ADD-TODOLIST",

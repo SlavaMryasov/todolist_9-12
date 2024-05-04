@@ -96,9 +96,11 @@ function App() {
 	}
 
 	const removeTodolist = (todolistId: string) => {
-		dispatchTodolists(removeTodolistAC(todolistId))
+		let action = removeTodolistAC(todolistId)
+		dispatchTodolists(action)
+		dispatchTasks(action)
 	}
-
+	console.log(tasks)
 
 	const addTodolist = (title: string) => {
 		const todolistId = v1()
@@ -114,7 +116,7 @@ function App() {
 	}
 
 	const changeModeHandler = () => {
-		setThemeMode(themeMode == "light" ? "dark" : 'light')
+		setThemeMode(themeMode === "light" ? "dark" : 'light')
 	}
 
 	return (
