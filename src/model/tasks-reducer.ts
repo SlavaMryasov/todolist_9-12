@@ -119,7 +119,7 @@ export const removeTaskAC = (taskId: string, todolistId: string) => {
     } as const
 }
 
-export const addTaskAC = (title: string, todolistId: string, newTask: TaskType) => {
+export const addTaskAC = (todolistId: string, newTask: TaskType) => {
     return {
         type: "ADD-TASK",
         payload: {

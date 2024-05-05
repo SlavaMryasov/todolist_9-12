@@ -59,46 +59,15 @@ function App() {
 		},
 	});
 
-	const removeTask = (taskId: string, todolistId: string) => {
-		dispatch(removeTaskAC(taskId, todolistId))
-	}
-
-	const addTask = (title: string, todolistId: string) => {
-		const newTask = { id: v1(), title: title, isDone: false }
-		dispatch(addTaskAC(title, todolistId, newTask))
-	}
-
-	const changeTaskStatus = (taskId: string, taskStatus: boolean, todolistId: string) => {
-		dispatch(changeTaskStatusAC(taskId, taskStatus, todolistId))
-	}
-
-	const updateTask = (todolistId: string, taskId: string, title: string) => {
-		// dispatchTasks(updateTaskTitleAC(todolistId, taskId, title))
-		dispatch(updateTaskTitleAC(todolistId, taskId, title))
-	}
-
-	const changeFilter = (filter: FilterValuesType, todolistId: string) => {
-		dispatch(changeFilterAC(filter, todolistId))
-	}
-
-	const removeTodolist = (todolistId: string) => {
-		dispatch(removeTodolistAC(todolistId))
-	}
-
 	const addTodolist = (title: string) => {
 		const todolistId = v1()
 		dispatch(addTodolistAC(title, todolistId))
 	}
 
-
-
-	const updateTodolist = (todolistId: string, title: string) => {
-		dispatch(updateTodolistAC(todolistId, title))
-	}
-
 	const changeModeHandler = () => {
 		setThemeMode(themeMode === "light" ? "dark" : 'light')
 	}
+
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -124,36 +93,14 @@ function App() {
 				</Grid>
 
 				<Grid container spacing={4}>
-					{todolists.map((tl) => {
+					{todolists.map((tl, i) => {
 
-						const allTodolistTasks = tasks[tl.id]
-						let tasksForTodolist = allTodolistTasks
-
-						if (tl.filter === 'active') {
-							tasksForTodolist = allTodolistTasks.filter(task => !task.isDone)
-						}
-
-						if (tl.filter === 'completed') {
-							tasksForTodolist = allTodolistTasks.filter(task => task.isDone)
-						}
 
 						return (
-							<Grid>
+							<Grid key={tl.id}>
 								<Paper sx={{ p: '0 20px 21px 20px' }}>
 									<Todolist
-										key={tl.id}
-										todolistId={tl.id}
-										title={tl.title}
-										tasks={tasksForTodolist}
-										removeTask={removeTask}
-										changeFilter={changeFilter}
-										addTask={addTask}
-										changeTaskStatus={changeTaskStatus}
-										filter={tl.filter}
-										removeTodolist={removeTodolist}
-										updateTask={updateTask}
-										updateTodolist={updateTodolist}
-
+										todolist={tl}
 									/>
 								</Paper>
 							</Grid>
