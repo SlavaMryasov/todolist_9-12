@@ -46,7 +46,7 @@ function App() {
 
 
 	const todolists = useSelector<AppRootState, TodolistType[]>(state => state.todolists)
-	const tasks = useSelector<AppRootState, TasksStateType>(state => state.tasks)
+	// const tasks = useSelector<AppRootState, TasksStateType>(state => state.tasks)
 	const dispatch = useDispatch()
 
 	const [themeMode, setThemeMode] = useState<ThemeMode>('light')
